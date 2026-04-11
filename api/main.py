@@ -4,10 +4,24 @@ import os
 from collections import Counter
 from itertools import permutations
 from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
+
+origins = [
+    "http://localhost",
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
@@ -80,7 +94,7 @@ def get_dictionary_with_scores():
         for word in f.readlines():
             word = word.strip()
             score = sum([tile_scores[letter] for letter in word])
-            valid_words.update({word: {"letter_sorted": "".join(sorted(word)), "score": score}})
+            valid_words.update({word: {"score": score}})
     return valid_words
 
 
@@ -104,16 +118,21 @@ def compute_highest_scored_word(valid_words, input_tiles, word=""):
     offset = 0 if len(word) > 0 else 1  # keeps at least 2 characters unless there's a word
 
     input_permutations = []
-    for i in range(len(input_tiles) - offset):
-        permutable_input = [*input_tiles, word]
-        input_permutations.extend(
-            ["".join(permutation) for permutation in permutations(permutable_input, len(permutable_input) - i)]
-        )
+    permutable_input = [word, *input_tiles]
 
+    for i in range(len(input_tiles) - offset):
+        permutations_list = ["".join(permutation) for permutation in
+                             permutations(permutable_input, len(permutable_input) - i)]
+        permutations_list = [permutation for permutation in permutations_list if len(permutation) > len(word)]
+        permutations_list = sorted(permutations_list)
+        input_permutations.extend(permutations_list)
+
+    local_highest = "No word found", 0
     for permutation in input_permutations:
-        if valid_words.get(permutation, None):
-            return permutation, valid_words[permutation].get("score")
-    return "No word found", 0
+        if valid_words.get(permutation, None) and valid_words[permutation].get("score") > local_highest[1]:
+            local_highest = permutation, valid_words[permutation].get("score")
+
+    return local_highest
 
 # if __name__ == "__main__":
 #     uvicorn.run(app, host="0.0.0.0", port=8000)
