@@ -5,7 +5,17 @@ Accept: application/json
 
 ###
 
-GET http://127.0.0.1:8000/hello/User
-Accept: application/json
+### Get letter scores
+GET http://localhost:8000/letter_scores
+
+###
+
+### Test rack
+GET http://localhost:8000/rack/abc
+
+###
+
+### Test rack + word
+GET http://localhost:8000/rack/abc/word/a
 
 ###

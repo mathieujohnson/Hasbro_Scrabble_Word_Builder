@@ -1,0 +1,28 @@
+export class tileScoresType {
+    a: number = 0;
+    b: number = 0;
+    c: number = 0;
+    d: number = 0;
+    e: number = 0;
+    f: number = 0;
+    g: number = 0;
+    h: number = 0;
+    i: number = 0;
+    j: number = 0;
+    k: number = 0;
+    l: number = 0;
+    m: number = 0;
+    n: number = 0;
+    o: number = 0;
+    p: number = 0;
+    q: number = 0;
+    r: number = 0;
+    s: number = 0;
+    t: number = 0;
+    u: number = 0;
+    v: number = 0;
+    w: number = 0;
+    x: number = 0;
+    y: number = 0;
+    z: number = 0;
+}

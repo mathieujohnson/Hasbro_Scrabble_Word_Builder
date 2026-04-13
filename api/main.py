@@ -1,4 +1,4 @@
-# import uvicorn
+import uvicorn
 import json
 import os
 from collections import Counter
@@ -26,12 +26,30 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
+    return {"status": "server is up"}
+
+
+@app.get("/letter_scores")
+async def letter_scores():
+    tile_scores = get_game_tile_scores()
+    return {"scores": tile_scores}
+
+
+@app.get("/letter_distribution")
+async def letter_distribution():
+    tiles_qty = get_game_tile_qty()
+    return {"tiles_qty": tiles_qty}
+
+
+@app.get("/dictionary")
+async def dictionary():
     valid_words = get_dictionary_with_scores()
     return {"words": valid_words}
 
 
 @app.get("/rack/{rack}")
 async def only_rack(rack: str):
+    rack = rack.lower()
     validate_input(rack)
     highest_scored_word, score = get_highest_scored_word(rack)
     return {"rack": rack, "highest_scored_word": highest_scored_word, "score": score}
@@ -39,18 +57,23 @@ async def only_rack(rack: str):
 
 @app.get("/rack/{rack}/word/{word}")
 async def rack_and_word(rack: str, word: str):
+    rack = rack.lower()
+    word = word.lower()
     validate_input(rack, word)
     highest_scored_word, score = get_highest_scored_word(rack, word)
     if word in highest_scored_word:
         expending = True
     else:
         expending = False
-    tiles_used = highest_scored_word
-    for letter in word:
-        if letter in tiles_used:
+    tiles_used = highest_scored_word if score else ""
+    left_in_rack = rack
+    for letter in tiles_used:
+        if letter not in left_in_rack:
             tiles_used = tiles_used.replace(letter, "", 1)
             if not expending:
                 break
+        else:
+            left_in_rack = left_in_rack.replace(letter, "", 1)
     return {"rack": rack, "word": word, "highest_scored_word": highest_scored_word, "score": score,
             "expending": expending, "tiles_used": tiles_used}
 
@@ -64,7 +87,7 @@ def validate_input(rack: str, word: Optional[str] = ""):
     game_tile_qty = get_game_tile_qty()
 
     for letter in input_tile_qty:
-        if input_tile_qty[letter] > game_tile_qty[letter]:
+        if input_tile_qty.get(letter, 0) > game_tile_qty.get(letter, 0):
             if letter in rack and letter in word:
                 error = "Double check your rack and word"
             elif letter in rack:
@@ -72,7 +95,7 @@ def validate_input(rack: str, word: Optional[str] = ""):
             else:
                 error = "Double check your word"
             raise HTTPException(status_code=400,
-                                detail=f"there's only {game_tile_qty[letter]} {letter.upper()} tile in the game. {error}")
+                                detail=f"there's only {game_tile_qty.get(letter, 0)} \"{letter.upper()}\" tile in the game. {error}")
 
 
 def get_game_tile_qty():
@@ -101,10 +124,9 @@ def get_dictionary_with_scores():
 def get_highest_scored_word(rack, word=""):
     valid_words = get_dictionary_with_scores()
 
-    highest = "", 0
+    highest = "No word found", 0
     for letter in word:
-        input_tiles = rack + letter
-        highest_scored_word, score = compute_highest_scored_word(valid_words, input_tiles)
+        highest_scored_word, score = compute_highest_scored_word(valid_words, rack, letter)
         if score > highest[1]:
             highest = highest_scored_word, score
 
@@ -123,16 +145,17 @@ def compute_highest_scored_word(valid_words, input_tiles, word=""):
     for i in range(len(input_tiles) - offset):
         permutations_list = ["".join(permutation) for permutation in
                              permutations(permutable_input, len(permutable_input) - i)]
-        permutations_list = [permutation for permutation in permutations_list if len(permutation) > len(word)]
+        permutations_list = [permutation for permutation in permutations_list if word in permutation]
         permutations_list = sorted(permutations_list)
         input_permutations.extend(permutations_list)
 
-    local_highest = "No word found", 0
+    local_highest = "", 0
     for permutation in input_permutations:
         if valid_words.get(permutation, None) and valid_words[permutation].get("score") > local_highest[1]:
             local_highest = permutation, valid_words[permutation].get("score")
 
     return local_highest
 
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
