@@ -85,6 +85,10 @@ limits the number of characters that can be entered in the inputs, but the api d
 backend returns an error message in that case.
 The other error cases are reported back to the frontend.
 
+## Frontend Screenshots
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
 ## Assumptions
 
 ### technical assumptions
