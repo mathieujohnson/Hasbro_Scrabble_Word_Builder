@@ -25,19 +25,19 @@ cd api
 uv sync
 ```
 
+activate the virtual environment
+
+on linux:`source .venv/bin/activate`
+
+on windows: `.venv\Scripts\activate`
+
 Run the backend server
 
 ```
-#activate the virtual environment
-#linux
-source .venv/bin/activate
-#windows
-.venv\Scripts\activate
-
 python main.py
 ```
 
-The api will be available at `http://localhost:8000`
+The api will be available at [http://localhost:8000](http://localhost:8000)
 
 3. Frontend setup
    in a new terminal/command line from the Hasbro_Scrabble_Word_Builder folder root.
@@ -54,7 +54,7 @@ Run the frontend
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:5173`
+The frontend will be available at [http://localhost:5173](http://localhost:5173)
 
 ## Usage Guidelines
 
@@ -98,9 +98,9 @@ The other error cases are reported back to the frontend.
 ### project assumptions
 
 - I assume that the word input is a valid word. If it's not, it will still probably return a valid word that crosses
-  vertically with the "word" (horizontal).
+  vertically with the "word" (horizontal) but it will not error out on the invalid word.
 - I assume that no white space or special characters that are not in the letter_data.json will be entered. (an error
-  message saying there's 0 of that character is returned)
+  message saying there's 0 of that character is returned if tried). There is no mechanism in place to prevent that.
 
 ## Design decisions
 
@@ -108,12 +108,14 @@ I started this project with the backend. I chose python as I thought I might nee
 as it turns out I was able to get it done with itertools' permutations only.
 Fast API was an easy choice for the size of the project. I decided to add a frontend to see if I could line up the words
 on a board. It was an opportunity to try the new version of vite!
-The server responds decently fast for smaller words, but I did observe it having longer response times when maxing out
+The server responds decently fast for smaller words, but I did observe longer response times when maxing out
 the word and rack lengths (around 4-5 seconds). Enough time that a loading animation would be warranted, I think.
-I started this project with just a couple words in my dictionary.txt, the exemples from the doc and a couple more. I
-tried to get more using Merriam-Webster's scrabble [list](https://scrabble.merriam.com/word-lists) but it got tedious
-quickly. I ended up finding the ENABLE dictionary (words with friends) and in particular,
+I started this project with just a couple words in my dictionary.txt: the exemples from the doc and a couple more. I
+quickly wanted more words, so I tried to get some using Merriam-Webster's scrabble [list](https://scrabble.merriam.com/word-lists) but it got tedious
+quickly. I ended up finding the *ENABLE* dictionary (words with friends) and in particular,
 this [github repo](https://github.com/MagicOctopusUrn/wordListsByLength) which has them by word length!
 The tile distribution and value points were easy to find, and I did try to play with it a bit to see how it reacted to
-changes.
-For the frontend, I started from the vite starter project and modified it. 
+changes in scores and tile quantities.
+For the frontend, I started from the vite starter project and modified it, starting with simple api calls, then adding the form. Eventually adding the board layout and displaying tiles to make it pretty.
+I worked with inline styles to juggle less files but eventually cleaned it up.
+I thought about adding buttons to generate rack and word as if we were drawing tiles like in scrabble but I stopped myself, otherwise I might have had the idea to code the whole game!
