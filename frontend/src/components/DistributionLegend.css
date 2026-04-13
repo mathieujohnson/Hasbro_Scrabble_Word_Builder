@@ -1,0 +1,12 @@
+.distribution_container {
+    position: absolute;
+    left: 1rem;
+    top: 30rem;
+    width: 10rem;
+}
+
+.distribution_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 0.7rem;
+}

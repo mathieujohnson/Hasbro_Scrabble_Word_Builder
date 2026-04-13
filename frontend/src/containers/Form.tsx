@@ -1,3 +1,4 @@
+import './Form.css';
 import Rack from "./Rack.tsx";
 import * as React from "react";
 import {type Dispatch, type SetStateAction, useRef, useState} from "react";
@@ -52,8 +53,6 @@ const Form = ({word, setWord, tileScores, setTilesUsed, setHighestScoredWord, se
             fetch(`http://localhost:8000/rack/${rack}`)
                 .then(response => response.json())
                 .then(result => handleResponse(result))
-        } else {
-            console.log("input invalid")
         }
     }
 
@@ -82,19 +81,11 @@ const Form = ({word, setWord, tileScores, setTilesUsed, setHighestScoredWord, se
     return <>
         <div>{errorMessage}</div>
         <form id="center" onSubmit={fetchHighestScore}>
-            <div style={{width: "30rem", margin: "auto", height: "6.4rem"}}>
+            <div className={"input_container wide"}>
                 <label>Rack
                     <input
                         ref={rackRef}
-                        style={{
-                            color: "transparent",
-                            backgroundColor: "transparent",
-                            caretColor: "black",
-                            height: "3.4rem",
-                            fontSize: "3rem",
-                            letterSpacing: "3rem",
-                            width: "30rem",
-                        }}
+                        className={"label wide"}
                         maxLength={7}
                         value={rack}
                         type="text"
@@ -102,24 +93,15 @@ const Form = ({word, setWord, tileScores, setTilesUsed, setHighestScoredWord, se
                         placeholder="rack letters"
                         autoComplete="off"
                         onChange={handleRackChange}/></label>
-                <div style={{position: "relative", top: "-3.4rem", paddingLeft: "0.5rem"}}
-                     onClick={() => rackRef.current?.focus()}>
+                <div className={"tile_input_container"} onClick={() => rackRef.current?.focus()}>
                     <Rack letters={rack} tileScores={tileScores} numLetters={7}/>
                 </div>
             </div>
-            <div style={{width: "65rem", margin: "auto", height: "6.4rem"}}>
+            <div className={"input_container wider"}>
                 <label>Word on Board
                     <input
                         ref={wordRef}
-                        style={{
-                            color: "transparent",
-                            backgroundColor: "transparent",
-                            caretColor: "black",
-                            height: "3.4rem",
-                            fontSize: "3rem",
-                            letterSpacing: "3rem",
-                            width: "65rem",
-                        }}
+                        className={"label wider"}
                         maxLength={15}
                         value={word}
                         type="text"
@@ -127,13 +109,11 @@ const Form = ({word, setWord, tileScores, setTilesUsed, setHighestScoredWord, se
                         placeholder="word on board"
                         autoComplete="off"
                         onChange={handleWordChange}/></label>
-                <div style={{position: "relative", top: "-3.4rem", paddingLeft: "0.5rem"}}
-                     onClick={() => wordRef?.current?.focus()}>
+                <div className={"tile_input_container"} onClick={() => wordRef?.current?.focus()}>
                     <Rack letters={word} tileScores={tileScores} numLetters={15}/>
                 </div>
             </div>
-            <input style={{fontSize: "1rem", backgroundColor: "green"}} type="submit"
-                   value="Get highest scoring word"/>
+            <input className={"submit"} type="submit" value="Get highest scoring word"/>
         </form>
     </>
 }

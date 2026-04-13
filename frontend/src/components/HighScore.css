@@ -1,0 +1,10 @@
+.score_container {
+    position: absolute;
+    right: 3rem;
+    top: 48rem;
+    min-width: 10rem;
+    background-color: #dbd5bf;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: -4px 4px 2px 1px #1f202899;
+}

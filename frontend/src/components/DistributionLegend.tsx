@@ -1,12 +1,13 @@
+import './DistributionLegend.css'
 import {tileScoresType} from "../interfaces.ts";
 
 type inputProps = {
     tileQty: tileScoresType;
 }
 const DistributionLegend = ({tileQty}: inputProps) => {
-    return <div style={{position: "absolute", left: "1rem", top: "30rem", width: "10rem"}}>
+    return <div className={"distribution_container"}>
         Letter Distribution
-        <div style={{display: "grid", gridTemplateColumns: "repeat(3, 1fr)", fontSize: "0.7rem"}}>
+        <div className={"distribution_grid"}>
             {tileQty && Object.keys(tileQty).map((key, i) => {
                 const str = key as keyof typeof tileQty
                 return <div key={i}>{key}:{tileQty[str]}</div>

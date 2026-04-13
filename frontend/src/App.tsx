@@ -1,4 +1,3 @@
-import './App.css'
 import {useEffect, useState} from "react";
 import GameBoard from "./containers/GameBoard.tsx";
 import DistributionLegend from "./components/DistributionLegend.tsx";
@@ -32,6 +31,7 @@ function App() {
 
     return (
         <>
+            <h2>Hasbro Connected Commerce Engineering - Coding Challenge - Mathieu Johnson</h2>
             <div>
                 <GameBoard word={word} highestScoredWord={highestScoredWord} expending={expending} tilesUsed={tilesUsed}
                            tileScores={tileScores}/>

@@ -1,4 +1,5 @@
 import BackgroundImage from '../assets/wood.png'
+import './GameTile.css'
 
 type inputProps = {
     letter: string;
@@ -6,19 +7,11 @@ type inputProps = {
 }
 
 const GameTile = ({letter, score}: inputProps) => {
-    return (<div style={{marginBlock: "0.2rem"}}>
-            <div style={{
-                backgroundImage: `url(${BackgroundImage})`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-                backgroundRepeat: "no-repeat",
-                width: "3rem",
-                height: "3rem",
-                fontSize: "1.5rem",
-            }}>
-                <div style={{paddingTop: "0.5rem"}}>
+    return (<div className={"tile_container"}>
+            <div className={"tile_image"} style={{backgroundImage: `url(${BackgroundImage})`}}>
+                <div className={"padding_top"}>
                     {letter && letter.toUpperCase()}
-                    <sub style={{fontSize: "0.9rem"}}>{score}</sub>
+                    <sub className={"subscript"}>{score}</sub>
                 </div>
             </div>
         </div>

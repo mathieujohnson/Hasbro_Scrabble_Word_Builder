@@ -1,3 +1,4 @@
+import './GameBoard.css'
 import GameTile from "../components/GameTile.tsx";
 
 import {tileScoresType} from "../interfaces.ts";
@@ -34,31 +35,11 @@ const GameBoard = ({word, highestScoredWord, expending, tilesUsed, tileScores}: 
         [...verticalAfter].map((letter, i) => {
             vertical.set(105 + horizontalOffset + gridWidth * (i + 1), letter)
         });
-
-        console.log(intersectingLetter, verticalBefore, verticalAfter, vertical, horizontalOffset)
     }
-    console.log(expending, word, highestScoredWord)
 
 
-    return <div style={{
-        backgroundColor: "#fff",
-        width: "52rem",
-        height: "54rem",
-        marginInline: "auto",
-        marginTop: "5rem",
-        marginBottom: "3rem",
-        paddingTop: "0.2rem",
-    }}>
-        <div style={{
-            width: "50rem",
-            height: "52rem",
-            border: "1px solid black",
-            backgroundColor: "#fff",
-            margin: "0.5rem",
-            padding: "0.5rem",
-            display: "grid",
-            gridTemplateColumns: `repeat(${gridWidth}, 1fr)`
-        }}>
+    return <div className={'grid_container'}>
+        <div className={'game_grid'} style={{gridTemplateColumns: `repeat(${gridWidth}, 1fr)`}}>
             {
                 Array(gridElement).fill(1).map((_input, k) => {
                     if (vertical.get(k)) {
@@ -69,12 +50,7 @@ const GameBoard = ({word, highestScoredWord, expending, tilesUsed, tileScores}: 
                         const key = horizontal[k - 105] as keyof typeof tileScores
                         return <GameTile letter={key} score={tileScores[key]}/>
                     } else {
-                        return <div key={k} style={{
-                            backgroundColor: "#dbd5bf",
-                            width: "3rem",
-                            height: "3rem",
-                            marginBlock: "0.2rem"
-                        }}/>
+                        return <div key={k} className={"empty_tile"}/>
                     }
                 })
             }

@@ -1,0 +1,32 @@
+.label {
+    color: transparent;
+    background-color: transparent;
+    caret-color: black;
+    height: 3.4rem;
+    font-size: 3rem;
+    letter-spacing: 3rem;
+}
+
+.input_container {
+    margin: auto;
+    height: 6.4rem;
+}
+
+.tile_input_container {
+    position: relative;
+    top: -3.4rem;
+    padding-left: 0.5rem;
+}
+
+.submit {
+    font-size: 1rem;
+    background-color: green;
+}
+
+.wide {
+    width: 30rem;
+}
+
+.wider {
+    width: 65rem;
+}
